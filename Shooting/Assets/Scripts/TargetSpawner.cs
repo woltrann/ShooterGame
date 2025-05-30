@@ -26,7 +26,7 @@ public class TargetSpawner : MonoBehaviour
 
     public void StartGame()
     {
-        InvokeRepeating(nameof(SpawnTarget), 1f, Random.Range(2f, 3f)); // her 2 saniyede bir hedef fýrlar
+        InvokeRepeating(nameof(SpawnTarget), 1f, Random.Range(1f, 1.5f)); // her 2 saniyede bir hedef fýrlar
     }
 
     public void SpawnTarget()
@@ -43,21 +43,6 @@ public class TargetSpawner : MonoBehaviour
             Vector3 spawnPos = new Vector3(x, y, z);
             GameObject target = Instantiate(targetPrefabs[sign], spawnPos, Quaternion.identity);
 
-
-            //if (sign == 0)
-            //{
-            //    Text text = target.GetComponentInChildren<Text>();
-
-            //    if (text != null)
-            //    {
-            //        text.text = TextUpdater.Instance.inputField.text;
-            //    }
-            //    else
-            //    {
-            //        Debug.LogWarning("Text bileþeni bulunamadý.");
-            //    }
-            //}
-
             Text text = target.GetComponentInChildren<Text>();
             if (text != null)
             {
@@ -73,9 +58,6 @@ public class TargetSpawner : MonoBehaviour
                 Debug.LogWarning("Text bileþeni bulunamadý.");
             }
 
-
-
-
             Rotate rotateScript = target.GetComponent<Rotate>();
             if (rotateScript != null)
             {
@@ -88,19 +70,10 @@ public class TargetSpawner : MonoBehaviour
 
             float direction = x >= -397.43f ? -1f : 1f;        // Hangi yöne gideceðine karar ver
             Vector3 lateralPos = target.transform.position + new Vector3(direction * lateralDistance, 0f, 0f);
+   
+            Tween moveX = target.transform.DOMoveX(lateralPos.x, 1.5f).SetEase(Ease.Linear);       // X ekseni hareketi (yana)
 
-       
-            Tween moveX = target.transform.DOMoveX(lateralPos.x, 4f).SetEase(Ease.Linear);       // X ekseni hareketi (yana)
-
-            // Y ekseni salýnýmý (ayný anda baþlar, looping)
-            //Tween bounceY = target.transform.DOMoveY(transform.position.y + 0.5f, 0.25f)
-            //    .SetLoops(8, LoopType.Yoyo)
-            //    .SetEase(Ease.InOutSine);
-
-            // Ýkisini ayný anda oynat
             seq.Append(moveX);
-            //bounceY.Play();
-
 
             seq.Append(target.transform.DOMoveY(y, fallDuration).SetEase(Ease.InQuad));      // Aþaðý in
 
